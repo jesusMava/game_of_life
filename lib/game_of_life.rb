@@ -70,33 +70,63 @@ module GameOfLife
       @copy_board = copy_board
     end
 
+    def method_divisor(initial_position, final_position, div_array = [])
+      (initial_position..final_position).each do |position|
+        div_array.push(position)
+      end
+      div_array
+    end
+
     def method_top_row
       columna = 0
+      initial_position = 0
+      final_position = 2
       @top_row = []
       loop do
-        @top_row.push(@copycat_board[columna])
+        div_array = method_divisor(initial_position, final_position)
+        @top_row.push(div_array)
+        initial_position += 3
+        final_position += 3
         columna += 3
-        break if columna == @mini_colums
+        break if columna == @copy_board.mini_colums
       end
     end
 
     def method_medium_row
       columna = 1
+      initial_position = 0
+      final_position = 2
       @medium_row = []
       loop do
-        @medium_row.push(@copycat_board[columna])
+        div_array = method_divisor(initial_position, final_position)
+        puts div_array
+        @medium_row.push(div_array)
+        initial_position += 3
+        final_position += 3
         columna += 3
-        break if columna > @mini_colums
+        break if columna > @copy_board.mini_colums
       end
     end
 
     def method_low_row
       columna = 2
+      initial_position = 0
+      final_position = 2
       @low_row = []
       loop do
-        @low_row.push(@copycat_board[columna])
+        div_array = method_divisor(initial_position, final_position)
+        @low_row.push(div_array)
+        initial_position += 3
+        final_position += 3
         columna += 3
-        break if columna > @mini_colums
+        break if columna > @copy_board.mini_colums
+      end
+    end
+
+    def show_arrays
+      @top_row.each do |elem|
+        puts elem
+        puts "_______"
       end
     end
 
@@ -110,8 +140,23 @@ module GameOfLife
       end
     end
   end
-  tableros = Tableros.new(2)
-  play = Play.new
+=begin
+      initial_position = 0
+      final_position = 2
+      loop do
+        (initial_position..final_position).each do |position|
+          puts position
+        end
+        initial_position += 3
+        final_position += 3
+        top_row += 1
+        medium_row += 1
+        low_row += 1
+        break if final_position > @total_squares - 1
+      end
+=end
+  tableros = Tableros.new(4)
+  play = Play.new(tableros)
   tableros.method_large_boards
   tableros.method_width_square
   tableros.method_total_squares
@@ -123,6 +168,7 @@ module GameOfLife
   play.method_top_row
   play.method_medium_row
   play.method_low_row
+#  play.show_arrays
   input_user = 0
   loop do
     puts 'Please, choose a position '
