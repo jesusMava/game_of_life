@@ -70,61 +70,54 @@ module GameOfLife
       @copy_board = copy_board
     end
 
-    def method_divisor(initial_position, final_position, div_array = [])
-      (initial_position..final_position).each do |position|
-        div_array.push(position)
+    def method_divisor(fila, initial_position = 0, final_position = 2, responce = [])
+      until final_position >= @copy_board.mini_colums
+        div_array = []
+        (initial_position..final_position).each do |col|
+          div_array.push(@copy_board.copycat_board[fila][col])
+        end
+        initial_position += 3
+        final_position += 3
+        responce.push(div_array)
       end
-      div_array
+      responce
     end
 
     def method_top_row
-      columna = 0
-      initial_position = 0
-      final_position = 2
+      fila = 0
       @top_row = []
       loop do
-        div_array = method_divisor(initial_position, final_position)
-        @top_row.push(div_array)
-        initial_position += 3
-        final_position += 3
-        columna += 3
-        break if columna == @copy_board.mini_colums
+        responce = method_divisor(fila)
+        @top_row.push(responce)
+        fila += 3
+        break if fila == @copy_board.mini_colums
       end
     end
 
     def method_medium_row
-      columna = 1
-      initial_position = 0
-      final_position = 2
+      fila = 1
       @medium_row = []
       loop do
-        div_array = method_divisor(initial_position, final_position)
-        puts div_array
-        @medium_row.push(div_array)
-        initial_position += 3
-        final_position += 3
-        columna += 3
-        break if columna > @copy_board.mini_colums
+        responce = method_divisor(fila)
+        @medium_row.push(responce)
+        fila += 3
+        break if fila > @copy_board.mini_colums
       end
     end
 
     def method_low_row
-      columna = 2
-      initial_position = 0
-      final_position = 2
+      fila = 2
       @low_row = []
       loop do
-        div_array = method_divisor(initial_position, final_position)
-        @low_row.push(div_array)
-        initial_position += 3
-        final_position += 3
-        columna += 3
-        break if columna > @copy_board.mini_colums
+        responce = method_divisor(fila)
+        @low_row.push(responce)
+        fila += 3
+        break if fila > @copy_board.mini_colums
       end
     end
 
     def show_arrays
-      @top_row.each do |elem|
+      @low_row[3][3].each do |elem|
         puts elem
         puts "_______"
       end
@@ -140,21 +133,7 @@ module GameOfLife
       end
     end
   end
-=begin
-      initial_position = 0
-      final_position = 2
-      loop do
-        (initial_position..final_position).each do |position|
-          puts position
-        end
-        initial_position += 3
-        final_position += 3
-        top_row += 1
-        medium_row += 1
-        low_row += 1
-        break if final_position > @total_squares - 1
-      end
-=end
+
   tableros = Tableros.new(4)
   play = Play.new(tableros)
   tableros.method_large_boards
@@ -163,12 +142,12 @@ module GameOfLife
   tableros.method_create_origina_board
   tableros.method_copycat_board
   tableros.method_list_boards
-  # tableros.show_copycat_board
+  tableros.method_show_copycat_board
   tableros.method_last_line
   play.method_top_row
   play.method_medium_row
   play.method_low_row
-#  play.show_arrays
+  play.show_arrays
   input_user = 0
   loop do
     puts 'Please, choose a position '
