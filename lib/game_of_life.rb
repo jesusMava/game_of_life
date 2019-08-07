@@ -117,24 +117,71 @@ module GameOfLife
     end
 
     def show_arrays
-      @low_row[3][3].each do |elem|
-        puts elem
-        puts "_______"
+      ['V',1,3,4,'V',2,6,'V'].each_with_index do |x,index|
+       if x == 'V'
+        puts index
+        puts  "--------"
+       end
       end
     end
-
+#aqui ya recibo el array dividido 
     def comprobar
-      position = 0
-      until dividers < num_squares - 1
-        mini_check = []
-        mini_check.push(@top_row[position])
-        mini_check.push(@medium_row[position])
-        mini_check.push(@low_row[position])
-      end
+      fila = 0
+      columna = 0
+      dividers = 0
+      array_changes_life = []
+      array_changes_dead = []
+      until fila > @copy_board.num_squares - 1
+        until dividers > @copy_board.num_squares - 1
+          mini_check = []
+          count = 0
+          mini_check.push(@top_row[fila][columna])
+          mini_check.push(@medium_row[fila][columna])
+          mini_check.push(@low_row[fila][columna])
+          # una vez que se arme el mini tic, el contador tendra el valor 
+          (0..2).each do |intern_array|
+            if mini_check[intern_array] == 'V'
+              count += 1
+            end
+          end
+
+          if count <= 2
+            mini_check.each_with_index do |x, index|
+              array_changes_dead.push(index) if x == 'V'
+            end
+          else
+            array_currently_alive = []
+            array_currently_dead = []
+            mini_check.each_with_index do |x, index|
+              if x == 'V'
+                array_currently_alive.push(index)
+              else
+                array_currently_dead.push(index)
+              end
+            end
+            #analizar celulas vivas
+            array_currently_alive.each do |elem|
+              
+              lim_up = 0..@copy_board.num_squares - 1 #0..6
+              lim_low = @copy_board.last_line... @copy_board.total_squares #30..6
+              lim_izq = x % num_squares == 1
+              lim_der = x % num_squares == 0
+              if array_currently_alive[x]
+              end
+            end
+          
+
+          end
+          dividers += 1
+          columna += 1
+        end#final del recorrido por columnas
+        fila += 1
+      end#final del recorrido por filas
+      
     end
   end
 
-  tableros = Tableros.new(4)
+  tableros = Tableros.new(2)
   play = Play.new(tableros)
   tableros.method_large_boards
   tableros.method_width_square
@@ -142,12 +189,17 @@ module GameOfLife
   tableros.method_create_origina_board
   tableros.method_copycat_board
   tableros.method_list_boards
+  tableros.copycat_board[0][1] = 'V'
+  tableros.copycat_board[0][0] = 'V'
+  
+
   tableros.method_show_copycat_board
   tableros.method_last_line
   play.method_top_row
   play.method_medium_row
   play.method_low_row
   play.show_arrays
+  #play.comprobar
   input_user = 0
   loop do
     puts 'Please, choose a position '
