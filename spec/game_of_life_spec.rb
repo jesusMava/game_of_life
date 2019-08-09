@@ -1,26 +1,15 @@
-=begin
-RSpec.describe GameOfLife do
-  it "has a version number" do
-    expect(GameOfLife::VERSION).not_to be nil
+RSpec.describe GameOfLife::Play do
+  tab = GameOfLife::Tableros.new
+  play = GameOfLife::Play.new(tab) 
+  context "validated rows" do
+    it "validated rows " do
+      expect(play.eval(1,2,'0')).to eq('0')
+    end 
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  context "rulers" do
+    it "check rulers" do
+      expect(play.rulers(2, '0')).to eq('.')
+    end
   end
-end
-=end
-RSpec.describe GameOfLife::Tableros do
-  tableros = GameOfLife::Tableros.new(2)
-  it "board's large " do
-    expect(tableros.large_boards).to eq(6)
-  end
-
-  it "board's width" do
-    expect(tableros.width_board).to eq(18)
-  end
-  
-  it "total squares" do
-    expect(tableros.total_squares).to eq(36)
-  end
-
 end
